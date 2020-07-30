@@ -51,4 +51,8 @@ public class EmployeeService {
     public Integer addEmps(List<Employee> list) {
         return employeeMapper.addEmps(list);
     }
+
+    public Integer deleteEmpById(Integer id) {
+        return employeeMapper.deleteByPrimaryKey(id);
+    }
 }

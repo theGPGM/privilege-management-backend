@@ -89,7 +89,10 @@
     <if test="keywords != null and keywords != ''">
         and e.name like concat('%', #{keywords}, '%')
     </if>
-    order by e.id limit #{offset}, #{size}
+    order by e.id
+    <if test="offset != null and size != null">
+      limit #{offset}, #{size}
+    </if>
   </select>
   <update id="updateByPrimaryKeySelective" parameterType="org.george.pm.model.Employee">
     update employee
@@ -358,6 +361,29 @@
     </trim>
   </insert>
   <insert id="addEmps">
-
+    insert into employee (name, gender,
+    birthday, idCard, wedlock, nationId,
+    nativePlace, politicId, email,
+    phone, address, departmentId,
+    jobLevelId, posId, engageForm,
+    tiptopDegree, specialty, school,
+    beginDate, workState, workID,
+    contractTerm, conversionTime, notWorkDate,
+    beginContract, endContract, workAge
+    )
+    values
+    <foreach collection="list" separator="," item="emp">
+      (#{emp.name,jdbcType=VARCHAR}, #{emp.gender,jdbcType=CHAR},
+      #{emp.birthday,jdbcType=DATE}, #{emp.idCard,jdbcType=CHAR}, #{emp.wedlock,jdbcType=CHAR},
+      #{emp.nationId,jdbcType=INTEGER},
+      #{emp.nativePlace,jdbcType=VARCHAR}, #{emp.politicId,jdbcType=INTEGER}, #{emp.email,jdbcType=VARCHAR},
+      #{emp.phone,jdbcType=VARCHAR}, #{emp.address,jdbcType=VARCHAR}, #{emp.departmentId,jdbcType=INTEGER},
+      #{emp.jobLevelId,jdbcType=INTEGER}, #{emp.posId,jdbcType=INTEGER}, #{emp.engageForm,jdbcType=VARCHAR},
+      #{emp.tipTopDegree,jdbcType=CHAR}, #{emp.specialty,jdbcType=VARCHAR}, #{emp.school,jdbcType=VARCHAR},
+      #{emp.beginDate,jdbcType=DATE}, #{emp.workState,jdbcType=CHAR}, #{emp.workId,jdbcType=CHAR},
+      #{emp.contractTerm,jdbcType=DOUBLE}, #{emp.conversionTime,jdbcType=DATE}, #{emp.notworkDate,jdbcType=DATE},
+      #{emp.beginContract,jdbcType=DATE}, #{emp.endContract,jdbcType=DATE}, #{emp.workAge,jdbcType=INTEGER}
+      )
+    </foreach>
   </insert>
 </mapper>

@@ -75,6 +75,14 @@ public class EmpBasicController {
         return departmentService.getAllDepartments();
     }
 
+    @DeleteMapping("/{id}")
+    public RespBean deleteEmpById(@PathVariable("id") Integer id){
+        if(employeeService.deleteEmpById(id) == 1){
+            return RespBean.ok("删除成功");
+        }
+        return RespBean.error("删除失败");
+    }
+
     @GetMapping("/export")
     public ResponseEntity<byte[]> exportData() {
         List<Employee> list = (List<Employee>) employeeService.getEmployeesByPage(null, null, null).getData();
