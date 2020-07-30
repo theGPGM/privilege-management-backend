@@ -2,7 +2,6 @@ package org.george.pm.service;
 
 import org.george.pm.mapper.PositionMapper;
 import org.george.pm.model.Position;
-import org.george.pm.model.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

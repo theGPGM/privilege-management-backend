@@ -1,7 +1,5 @@
 package org.george.pm.model;
 
-import org.omg.PortableServer.POAPackage.ObjectAlreadyActive;
-
 import java.util.List;
 
 public class RespPageBean {

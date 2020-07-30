@@ -25,5 +25,5 @@ public interface JobLevelMapper {
      * @param ids
      * @return
      */
-    int deleteByPrimaryKeys(@Param("ids")Integer[] ids);
+    int deleteByPrimaryKeys(@Param("ids") Integer[] ids);
 }

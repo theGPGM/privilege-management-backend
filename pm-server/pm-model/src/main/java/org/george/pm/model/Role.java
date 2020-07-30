@@ -1,7 +1,5 @@
 package org.george.pm.model;
 
-import java.util.List;
-
 public class Role {
     private Integer id;
 

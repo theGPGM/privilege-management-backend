@@ -29,5 +29,5 @@ public interface HrRoleMapper {
      * @param rids
      * @return
      */
-    Integer insertHrRoles(@Param("hrid")Integer hrid, @Param("rids") Integer[] rids);
+    Integer insertHrRoles(@Param("hrid") Integer hrid, @Param("rids") Integer[] rids);
 }
