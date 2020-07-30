@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/pm-server/pm-commons/pm-commons.iml" filepath="$PROJECT_DIR$/pm-server/pm-commons/pm-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pm-server/pm-mapper/pm-mapper.iml" filepath="$PROJECT_DIR$/pm-server/pm-mapper/pm-mapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pm-server/pm-model/pm-model.iml" filepath="$PROJECT_DIR$/pm-server/pm-model/pm-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pm-server/pm-server.iml" filepath="$PROJECT_DIR$/pm-server/pm-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pm-server/pm-service/pm-service.iml" filepath="$PROJECT_DIR$/pm-server/pm-service/pm-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pm-server/pm-web/pm-web.iml" filepath="$PROJECT_DIR$/pm-server/pm-web/pm-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/privilege-management-system.iml" filepath="$PROJECT_DIR$/.idea/privilege-management-system.iml" />
+    </modules>
+  </component>
+</project>

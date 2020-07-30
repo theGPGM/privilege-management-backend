@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.george.pm.mapper.MenuMapper">
+    <resultMap id="BaseResultMap" type="org.george.pm.model.Menu">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="path" property="path" jdbcType="VARCHAR"/>
+        <result column="component" property="component" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="iconCls" property="iconCls" jdbcType="VARCHAR"/>
+        <result column="parentId" property="parentId" jdbcType="INTEGER"/>
+        <result column="enabled" property="enabled" jdbcType="BIT"/>
+        <association property="meta" javaType="org.george.pm.model.Meta">
+            <result column="keepAlive" property="keepAlive" jdbcType="BIT"/>
+            <result column="requireAuth" property="requireAuth" jdbcType="BIT"/>
+        </association>
+    </resultMap>
+    <resultMap id="MenusPropertyList" type="org.george.pm.model.Menu" extends="BaseResultMap">
+        <collection property="children" ofType="org.george.pm.model.Menu">
+            <id column="id2" property="id" jdbcType="INTEGER"/>
+            <result column="url2" property="url" jdbcType="VARCHAR"/>
+            <result column="path2" property="path" jdbcType="VARCHAR"/>
+            <result column="component2" property="component" jdbcType="VARCHAR"/>
+            <result column="name2" property="name" jdbcType="VARCHAR"/>
+            <result column="iconCls2" property="iconCls" jdbcType="VARCHAR"/>
+            <result column="parentId2" property="parentId" jdbcType="INTEGER"/>
+            <result column="enabled2" property="enabled" jdbcType="BIT"/>
+            <association property="meta" javaType="org.george.pm.model.Meta">
+                <result column="keepAlive2" property="keepAlive" jdbcType="BIT"/>
+                <result column="requireAuth2" property="requireAuth" jdbcType="BIT"/>
+            </association>
+        </collection>
+    </resultMap>
+    <resultMap id="menuWithRoleMap" type="org.george.pm.model.Menu" extends="BaseResultMap">
+        <collection property="roles" ofType="org.george.pm.model.Role" columnPrefix="role_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="nameZh" column="nameZh"/>
+        </collection>
+    </resultMap>
+    <resultMap id="MenuWithChildrenMap" type="org.george.pm.model.Menu" extends="BaseResultMap">
+        <id column="id1" property="id"/>
+        <result column="name1" property="name"/>
+        <collection property="children" ofType="org.george.pm.model.Menu">
+            <id column="id2" property="id"/>
+            <result column="name2" property="name"/>
+            <collection property="children" ofType="org.george.pm.model.Menu">
+                <id column="id3" property="id"/>
+                <result column="name3" property="name"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, url, path, component, name, iconCls, keepAlive, requireAuth, parentId, enabled
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from menu
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="getMenuByHrId" parameterType="java.lang.Integer" resultMap="MenusPropertyList">
+        SELECT DISTINCT m1.*, m2.`id` AS id2, m2.`component` AS component2, m2.`enabled` AS enabled2, m2.`iconCls` iconCls2, m2.`name` name2, m2.`parentId` AS parentId2,m2.`requireAuth` AS requireAuth2, m2.`path` AS path2
+        FROM menu m1, menu m2, hr_role hrr, menu_role mr
+        WHERE m1.`id` = m2.`parentId` AND hrr.`hrid` = #{id,jdbcType=INTEGER} AND hrr.`rid` = mr.`rid` AND mr.`mid` = m2.`id` AND m2.`enabled`= TRUE ORDER BY m1.`id`, m2.`id`
+  </select>
+    <select id="getAllMenus" resultMap="MenuWithChildrenMap">
+        select m1.id as id1, m1.name as name1, m2.id as id2, m2.name as name2, m3.id as id3, m3.name as name3 from menu m1, menu m2, menu m3 where m1.id = m2.parentId and m2.id = m3.parentId and m3.enabled = true order by m2.id, m3.id;
+    </select>
+    <select id="getMenusIdWithRoleId" resultType="java.lang.Integer">
+        select
+        m.id
+        from menu m
+        left join menu_role mr on m.id = mr.mid
+        where mr.rid = #{rid}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from menu
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <select id="getAllMenuWithRole" resultMap="menuWithRoleMap">
+        select
+        m.*,
+        r.id role_id,
+        r.name role_name,
+        r.nameZh role_nameZh
+        from menu m
+        left join menu_role mr on m.id = mr.mid left join role r on mr.rid = r.id
+    </select>
+    <insert id="insert" parameterType="org.george.pm.model.Menu">
+    insert into menu (id, url, path, 
+      component, name, iconCls, 
+      keepAlive, requireAuth, parentId, 
+      enabled)
+    values (#{id,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{component,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{iconcls,jdbcType=VARCHAR}, 
+      #{keepalive,jdbcType=BIT}, #{requireauth,jdbcType=BIT}, #{parentid,jdbcType=INTEGER}, 
+      #{enabled,jdbcType=BIT})
+  </insert>
+    <insert id="insertSelective" parameterType="org.george.pm.model.Menu">
+        insert into menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="path != null">
+                path,
+            </if>
+            <if test="component != null">
+                component,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="iconcls != null">
+                iconCls,
+            </if>
+            <if test="keepalive != null">
+                keepAlive,
+            </if>
+            <if test="requireauth != null">
+                requireAuth,
+            </if>
+            <if test="parentid != null">
+                parentId,
+            </if>
+            <if test="enabled != null">
+                enabled,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="component != null">
+                #{component,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="iconcls != null">
+                #{iconcls,jdbcType=VARCHAR},
+            </if>
+            <if test="keepalive != null">
+                #{keepalive,jdbcType=BIT},
+            </if>
+            <if test="requireauth != null">
+                #{requireauth,jdbcType=BIT},
+            </if>
+            <if test="parentid != null">
+                #{parentid,jdbcType=INTEGER},
+            </if>
+            <if test="enabled != null">
+                #{enabled,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.george.pm.model.Menu">
+        update menu
+        <set>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="component != null">
+                component = #{component,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="iconcls != null">
+                iconCls = #{iconcls,jdbcType=VARCHAR},
+            </if>
+            <if test="keepalive != null">
+                keepAlive = #{keepalive,jdbcType=BIT},
+            </if>
+            <if test="requireauth != null">
+                requireAuth = #{requireauth,jdbcType=BIT},
+            </if>
+            <if test="parentid != null">
+                parentId = #{parentid,jdbcType=INTEGER},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.george.pm.model.Menu">
+    update menu
+    set url = #{url,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      component = #{component,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      iconCls = #{iconcls,jdbcType=VARCHAR},
+      keepAlive = #{keepalive,jdbcType=BIT},
+      requireAuth = #{requireauth,jdbcType=BIT},
+      parentId = #{parentid,jdbcType=INTEGER},
+      enabled = #{enabled,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
