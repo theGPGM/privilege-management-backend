@@ -2,10 +2,11 @@ package org.george.pm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class JobLevel {
+public class JobLevel implements Serializable {
     private Integer id;
 
     private String name;

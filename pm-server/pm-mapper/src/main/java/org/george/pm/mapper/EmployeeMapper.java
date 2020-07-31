@@ -8,8 +8,6 @@ import java.util.List;
 public interface EmployeeMapper {
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Employee record);
-
     int insertSelective(Employee record);
 
     Employee selectByPrimaryKey(Integer id);
@@ -23,4 +21,6 @@ public interface EmployeeMapper {
     Long getTotal(String keywords);
 
     Integer addEmps(List<Employee> list);
+
+    Employee getEmployeeById(Integer id);
 }

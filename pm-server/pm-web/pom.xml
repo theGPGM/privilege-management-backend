@@ -6,7 +6,6 @@
     <artifactId>pm-web</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>pm-web</name>
-    <description>Demo project for Spring Boot</description>
 
     <parent>
         <artifactId>pm-server</artifactId>
@@ -72,5 +71,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

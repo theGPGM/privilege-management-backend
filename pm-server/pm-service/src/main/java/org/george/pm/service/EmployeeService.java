@@ -5,10 +5,16 @@ import org.george.pm.mapper.EmployeeMapper;
 import org.george.pm.model.Employee;
 import org.george.pm.model.RespBean;
 import org.george.pm.model.RespPageBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,6 +24,15 @@ public class EmployeeService {
 
     @Autowired
     private CurrentWorkSequenceMapper currentWorkSequenceMapper;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
+    public static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
+
+    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+    DecimalFormat decimalFormat = new DecimalFormat("##.00");
 
     public RespPageBean getEmployeesByPage(Integer page, Integer size, String keywords) {
         Integer offset = null;
@@ -33,7 +48,18 @@ public class EmployeeService {
     }
 
     public Integer addEmployee(Employee e) {
-        return employeeMapper.insertSelective(e);
+        Date beginContract = e.getBeginContract();
+        Date endContract = e.getEndContract();
+        double month = (Double.parseDouble(yearFormat.format(endContract)) - Double.parseDouble(yearFormat.format(beginContract))) * 12 +
+                (Double.parseDouble(monthFormat.format(endContract)) - Double.parseDouble(monthFormat.format(beginContract)));
+        if(month < 0) return -1;
+        int result = employeeMapper.insertSelective(e);
+        if(result == 1){
+            e = employeeMapper.getEmployeeById(e.getId());
+            logger.info(e.toString());
+            rabbitTemplate.convertAndSend("george.mail.welcome", e);
+        }
+        return result;
     }
 
     @Transactional

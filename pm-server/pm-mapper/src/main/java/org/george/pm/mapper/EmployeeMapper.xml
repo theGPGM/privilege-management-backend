@@ -71,6 +71,22 @@
       where name like concat('%', #{keywords}, '%')
     </if>
   </select>
+  <select id="getEmployeeById" resultMap="AllEmployeeMap">
+    select
+    e.*,
+    n.id as nid,
+    n.name as nname,
+    pc.id as pcid,
+    pc.name as pcname,
+    d.id as did,
+    d.name as dname,
+    j.id as jid,
+    j.name as jname,
+    po.id as poid,
+    po.name as poname
+    from employee e, nation n, position po, politicsstatus pc, department d, joblevel j
+    where e.id = #{id} and e.nationId = n.id and e.politicId = pc.id and e.posId = po.id and e.departmentId = d.id and e.jobLevelId = j.id
+  </select>
   <select id="getEmployeesByPage" resultMap="AllEmployeeMap">
     select
     e.*,
@@ -360,7 +376,7 @@
       </if>
     </trim>
   </insert>
-  <insert id="addEmps">
+  <insert id="addEmps" useGeneratedKeys="true" keyProperty="id">
     insert into employee (name, gender,
     birthday, idCard, wedlock, nationId,
     nativePlace, politicId, email,

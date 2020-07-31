@@ -15,6 +15,7 @@
         <module>pm-mapper</module>
         <module>pm-model</module>
         <module>pm-service</module>
+        <module>pm-web</module>
     </modules>
 
 

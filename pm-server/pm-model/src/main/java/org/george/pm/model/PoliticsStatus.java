@@ -1,8 +1,9 @@
 package org.george.pm.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class PoliticsStatus {
+public class PoliticsStatus implements Serializable {
     private Integer id;
 
     private String name;
