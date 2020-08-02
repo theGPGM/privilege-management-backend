@@ -54,6 +54,8 @@ public class Employee implements Serializable {
 
     private Double contractTerm;
 
+    private Salary salary;
+
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Shanghai")
     private Date conversionTime;
 
@@ -342,6 +344,14 @@ public class Employee implements Serializable {
         this.position = position;
     }
 
+    public Salary getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Salary salary) {
+        this.salary = salary;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -368,6 +378,7 @@ public class Employee implements Serializable {
                 ", workState='" + workState + '\'' +
                 ", workId='" + workId + '\'' +
                 ", contractTerm=" + contractTerm +
+                ", salary=" + salary +
                 ", conversionTime=" + conversionTime +
                 ", notworkDate=" + notworkDate +
                 ", beginContract=" + beginContract +

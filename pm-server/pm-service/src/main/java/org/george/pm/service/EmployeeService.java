@@ -1,7 +1,9 @@
 package org.george.pm.service;
 
 import org.george.pm.mapper.CurrentWorkSequenceMapper;
+import org.george.pm.mapper.EmpSalaryMapper;
 import org.george.pm.mapper.EmployeeMapper;
+import org.george.pm.model.EmpSalary;
 import org.george.pm.model.Employee;
 import org.george.pm.model.RespBean;
 import org.george.pm.model.RespPageBean;
@@ -24,6 +26,9 @@ public class EmployeeService {
 
     @Autowired
     private CurrentWorkSequenceMapper currentWorkSequenceMapper;
+
+    @Autowired
+    private EmpSalaryMapper empSalaryMapper;
 
     @Autowired
     RabbitTemplate rabbitTemplate;
@@ -80,5 +85,29 @@ public class EmployeeService {
 
     public Integer deleteEmpById(Integer id) {
         return employeeMapper.deleteByPrimaryKey(id);
+    }
+
+    public RespPageBean getEmployeesWithSalaryByPage(Integer page, Integer size) {
+        Integer offset = null;
+        if (page != null && size != null) {
+            offset = (page - 1) * size;
+        }
+        Long total = employeeMapper.getTotal(null);
+        List<Employee> employees = employeeMapper.getEmployeesWithSalaryByPage(offset, size);
+        RespPageBean bean = new RespPageBean();
+        bean.setData(employees);
+        bean.setTotal(total);
+        return bean;
+    }
+
+    @Transactional
+    public Integer updateEmployeeWithSalary(Integer eid, Integer sid) {
+        empSalaryMapper.deleteByEmployeeId(eid);
+        EmpSalary empSalary = new EmpSalary();
+        empSalary.setEid(eid);
+        empSalary.setSid(sid);
+        if(empSalaryMapper.insert(empSalary) != 1)
+            return -1;
+        return 1;
     }
 }

@@ -47,9 +47,31 @@
     <association property="department" javaType="org.george.pm.model.Department">
       <id property="id" column="did" />
       <result property="name" column="dname"/>
-    </association>    <association property="jobLevel" javaType="org.george.pm.model.JobLevel">
+    </association>    
+    <association property="jobLevel" javaType="org.george.pm.model.JobLevel">
       <id property="id" column="jid" />
       <result property="name" column="jname"/>
+    </association>
+  </resultMap>
+  <resultMap id="AllEmployeeWithSalaryMap" type="org.george.pm.model.Employee" extends="BaseResultMap">
+    <association property="department" javaType="org.george.pm.model.Department">
+      <id property="id" column="did" />
+      <result property="name" column="dname"/>
+    </association>
+    <association property="salary" javaType="org.george.pm.model.Salary">
+      <id property="id" column="sid" />
+      <result property="name" column="sname" />
+      <result property="basicSalary" column="basicSalary" />
+      <result property="bonus" column="bonus" />
+      <result property="lunchSalary" column="lunchSalary" />
+      <result property="trafficSalary" column="trafficSalary" />
+      <result property="pensionBase" column="pensionBase" />
+      <result property="pensionPer" column="pensionPer" />
+      <result property="createDate" column="createDate" />
+      <result property="medicalBase" column="medicalBase" />
+      <result property="medicalPer" column="medicalPer" />
+      <result property="accumulationFundBase" column="accumulationFundBase" />
+      <result property="accumulationFundPer" column="accumulationFundPer" />
     </association>
   </resultMap>
   <sql id="Base_Column_List">
@@ -109,6 +131,33 @@
     <if test="offset != null and size != null">
       limit #{offset}, #{size}
     </if>
+  </select>
+  <select id="getEmployeesWithSalaryByPage" resultMap="AllEmployeeWithSalaryMap">
+    select
+    e.*,
+    d.id as did,
+    d.name as dname,
+    s.name as sname,
+    s.id as sid,
+    s.basicSalary,
+    s.bonus,
+    s.lunchSalary,
+    s.trafficSalary,
+    s.pensionBase,
+    s.pensionPer,
+    s.createDate,
+    s.medicalBase,
+    s.medicalPer,
+    s.accumulationFundBase,
+    s.accumulationFundPer
+
+    from employee e
+    left join empsalary es on es.eid = e.id
+    left join department d on d.id = e.departmentId
+    left join salary s on es.sid = s.id
+    order by e.id
+
+    limit #{offset}, #{size}
   </select>
   <update id="updateByPrimaryKeySelective" parameterType="org.george.pm.model.Employee">
     update employee

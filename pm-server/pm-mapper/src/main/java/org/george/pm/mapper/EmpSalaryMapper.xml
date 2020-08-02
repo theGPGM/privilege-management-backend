@@ -66,4 +66,7 @@
       sid = #{sid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <delete id="deleteByEmployeeId" parameterType="java.lang.Integer">
+    delete from empsalary where eid = #{eid}
+  </delete>
 </mapper>

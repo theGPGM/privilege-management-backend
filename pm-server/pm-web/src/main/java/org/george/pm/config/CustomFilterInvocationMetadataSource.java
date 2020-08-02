@@ -29,7 +29,6 @@ public class CustomFilterInvocationMetadataSource implements FilterInvocationSec
      * @return
      * @throws IllegalArgumentException
      */
-    //@Cacheable
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
         AntPathMatcher matcher = new AntPathMatcher();

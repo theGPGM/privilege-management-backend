@@ -2,6 +2,7 @@ package org.george.pm.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.george.pm.model.Employee;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -23,4 +24,8 @@ public interface EmployeeMapper {
     Integer addEmps(List<Employee> list);
 
     Employee getEmployeeById(Integer id);
+
+    List<Employee> getEmployeesWithSalaryByPage(Integer offset, Integer size);
+
+    Integer updateEmployeeWithSalary(@Param("id") Integer id,@Param("sid") Integer sid);
 }

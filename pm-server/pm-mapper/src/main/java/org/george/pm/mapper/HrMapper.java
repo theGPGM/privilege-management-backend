@@ -24,4 +24,8 @@ public interface HrMapper {
     List<Role> getHrRolesById(Integer id);
 
     List<Hr> getAllHr(@Param("id") Integer id, @Param("keywords") String keywords);
+
+    List<Hr> getAllHrWithoutCurrentHr(Integer id);
+
+    Integer updatePassword(@Param("id")Integer id,@Param("encodePass") String encodePass);
 }

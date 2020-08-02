@@ -64,6 +64,19 @@
     </if>
     order by h.id
   </select>
+  <select id="getAllHrWithoutCurrentHr" resultType="org.george.pm.model.Hr">
+    select
+    id,
+    name,
+    phone,
+    telephone,
+    address,
+    enabled,
+    userface,
+    username,
+    remark
+    from hr where id != #{id} and enabled = true
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from hr
     where id = #{id,jdbcType=INTEGER}
@@ -191,5 +204,10 @@
       userface = #{userface,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updatePassword">
+    update hr
+    set password = #{encodePass}
+    where id = #{id}
   </update>
 </mapper>

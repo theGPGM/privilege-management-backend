@@ -5,6 +5,8 @@ import org.george.pm.mapper.MenuRoleMapper;
 import org.george.pm.model.Hr;
 import org.george.pm.model.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames = "menus_cache")
 public class MenuService {
     @Autowired
     private MenuMapper menuMapper;
@@ -40,6 +43,7 @@ public class MenuService {
      * 获得菜单项所需所有角色
      * @return
      */
+    @Cacheable
     public List<Menu> getAllMenuWithRole() {
         return menuMapper.getAllMenuWithRole();
     }
